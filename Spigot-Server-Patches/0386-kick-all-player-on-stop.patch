@@ -1,0 +1,27 @@
+From f5bb4183b55fbaa5f77fc93360898e9feddc8bd1 Mon Sep 17 00:00:00 2001
+From: Ling556 <ling_haner@163.com>
+Date: Thu, 23 May 2024 23:43:23 +0800
+Subject: [PATCH] kick all player on stop
+
+
+diff --git a/src/main/java/net/minecraft/server/MinecraftServer.java b/src/main/java/net/minecraft/server/MinecraftServer.java
+index 3b982f990..165ad947c 100644
+--- a/src/main/java/net/minecraft/server/MinecraftServer.java
++++ b/src/main/java/net/minecraft/server/MinecraftServer.java
+@@ -480,6 +480,13 @@ public abstract class MinecraftServer implements ICommandListener, Runnable, IAs
+         }
+         // CraftBukkit end
+         MinecraftServer.LOGGER.info("Stopping server");
++        // Custom start
++        MinecraftServer.LOGGER.info("Kicking all players");
++        for (EntityPlayer player : getPlayerList().players) {
++            player.playerConnection.disconnect(this.server.getShutdownMessage());
++        }
++        try { Thread.sleep(100); } catch (InterruptedException ex) {}
++        // Custom end
+         MinecraftTimings.stopServer(); // Paper
+         // CraftBukkit start
+         if (this.server != null) {
+-- 
+2.34.1
+
